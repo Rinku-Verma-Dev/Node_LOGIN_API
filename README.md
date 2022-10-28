@@ -1,6 +1,4 @@
-# Project Title
-
-A nice project with a nice description
+# Node Login API
 
 ---
 ## Requirements
