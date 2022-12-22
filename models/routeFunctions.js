@@ -4,6 +4,7 @@ const jwt = require("jsonwebtoken");
 
 const userId = require("../models/userSchema");
 const data = require("../public/data");
+const { get_random, isPresent } = require("./helper");
 
 // ----->   Fetching data by user ID
 const profileById = async (req, res) => {
@@ -154,8 +155,34 @@ const changePassword = async (req, res) => {
   }
 };
 
+// ------>>>>    shuffle santa secret
 const shuffelData = async (req, res) => {
-  console.log("'kkk..............>>>>", req.body);
+  const participantsName = req.body.map((itm) => ({
+    name: itm.name,
+    email: itm.email,
+  }));
+  const player = [];
+  const santa = [];
+  let shuffle = [];
+  while (player.length !== participantsName.length) {
+    let index1 = get_random(participantsName.length);
+    let index2 = get_random(participantsName.length);
+    if (index1 !== index2) {
+      if (!isPresent(player, index1) && !isPresent(santa, index2)) {
+        player.push(index1);
+        santa.push(index2);
+      }
+    }
+  }
+  shuffle = participantsName.map((itm, i) => {
+    const ans = {
+      player: participantsName[player[i]].name,
+      santa: participantsName[santa[i]].name,
+      email: participantsName[player[i]].email,
+    };
+    return ans;
+  });
+  console.log({ shuffle });
 };
 
 module.exports = {
